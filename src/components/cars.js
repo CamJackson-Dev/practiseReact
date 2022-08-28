@@ -6,12 +6,17 @@ import Form from "./form";
 class Cars extends Component {
   state = {
     cars: null,
+    start: 0,
+    end: 100,
   };
 
   getAllTheCars() {
     carsCollection
       //   .where("price", ">=", 100)
       .orderBy("price", "asc")
+      .startAt(this.state.start) // Start listing items at Price of 3000
+      .endAt(this.state.end)
+      //.limit(3) // how many items to display
       .get()
       .then((snapshot) => {
         const cars = firebaseLooper(snapshot);
@@ -24,6 +29,11 @@ class Cars extends Component {
 
   componentDidMount() {
     this.getAllTheCars();
+    // setTimeout(() => {
+    //   carsCollection.doc("fJMTkqNJx0IfuNcQf6Eb").update({
+    //     colour: "red",
+    //   });
+    // }, 3000);
 
     /// GET DOC BY ID
     // carsCollection.doc('LqJq2rMLk063JabFSLiy').get().then( snapshot =>{
@@ -48,10 +58,30 @@ class Cars extends Component {
         ))
       : null;
 
+  sortResults(values) {
+    this.setState(
+      {
+        start: values[0],
+        end: values[1],
+      },
+      () => {
+        this.getAllTheCars();
+      }
+    );
+  }
+
   render() {
     return (
       <>
+        <button onClick={() => this.sortResults([0, 100])}>0-100</button>
+        <button onClick={() => this.sortResults([100, 200])}>100-200</button>
+        <button onClick={() => this.sortResults([200, 100000])}>
+          200-100000
+        </button>
+        <button onClick={() => this.sortResults([0, 100000])}>All</button>
+
         <Form />
+
         <table className="table table-dark">
           <thead>
             <tr>
@@ -67,5 +97,13 @@ class Cars extends Component {
     );
   }
 }
+
+// carsCollection.doc("fJMTkqNJx0IfuNcQf6Eb").onSnapshot((doc) => {
+//   console.log("Current Data", doc.data());
+// });
+
+carsCollection.onSnapshot((querySnapShot) => {
+  console.log(querySnapShot.docChanges());
+});
 
 export default Cars;

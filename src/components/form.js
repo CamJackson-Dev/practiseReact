@@ -1,18 +1,40 @@
 import React, { Component } from "react";
-import { carsCollection } from "../utils/firebase";
-import { firebaseTimestamp } from "../utils/firebase";
+import firebase, { carsCollection, firebaseTimestamp } from "../utils/firebase";
 
 class Form extends Component {
   state = {
     brand: "",
-    color: "",
+    colour: "",
     price: "",
     available: "",
   };
 
+  // when component mounts, update data in db
+  componentDidMount() {
+    // object data
+    // carsCollection.doc("fJMTkqNJx0IfuNcQf6Eb").update({
+    //   "dealers.california": true,
+    // });
+    // update array data
+    // carsCollection.doc("fJMTkqNJx0IfuNcQf6Eb").update({
+    //   tags: firebase.firestore.FieldValue.arrayUnion("Awesome"),
+    // });
+    // remove array data
+    // carsCollection.doc("fJMTkqNJx0IfuNcQf6Eb").update({
+    //   tags: firebase.firestore.FieldValue.arrayRemove("Awesome"),
+    // });
+  }
+
   handleForm = (e) => {
     e.preventDefault();
     // console.log(this.state);
+
+    // Edit in db by ID
+    // carsCollection.doc("KXY8NyucuesKpdG2G2Pr").update({
+    //   ...this.state,
+    //   available: this.state.available === "true" ? true : false,
+    //   price: parseInt(this.state.price),
+    // });
 
     // add to the db
     carsCollection
@@ -21,6 +43,12 @@ class Form extends Component {
         available: this.state.available === "true" ? true : false,
         price: parseInt(this.state.price),
         createdAt: firebaseTimestamp(),
+        dealers: {
+          virginia: true,
+          california: false,
+          washington: false,
+        },
+        tags: ["Good", "Comfortable", "Expensive"],
       })
       .then((data) => {
         console.log(data);
