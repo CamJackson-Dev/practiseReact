@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { firebaseLooper } from "../utils/tools";
 import { carsCollection, employeeRef } from "../utils/firebase";
-// import Form from "./forms";
+import Form from "./form";
 
 class Cars extends Component {
   state = {
@@ -10,7 +10,8 @@ class Cars extends Component {
 
   getAllTheCars() {
     carsCollection
-      //   .orderBy("price", "asc")
+      //   .where("price", ">=", 100)
+      .orderBy("price", "asc")
       .get()
       .then((snapshot) => {
         const cars = firebaseLooper(snapshot);
@@ -50,6 +51,7 @@ class Cars extends Component {
   render() {
     return (
       <>
+        <Form />
         <table className="table table-dark">
           <thead>
             <tr>

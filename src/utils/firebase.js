@@ -26,6 +26,7 @@ const analytics = getAnalytics(app);
 
 // Firestore DB
 const db = firebase.firestore();
+export const firebaseTimestamp = firebase.firestore.FieldValue.serverTimestamp;
 export const carsCollection = db.collection("cars");
 // db.collection("cars").delete();
 
